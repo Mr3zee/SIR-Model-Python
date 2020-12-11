@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{cases}
+\usepackage{hyperref}
 
 \title{SIR models for the spread of COVID-19}
 \date{\today}
@@ -60,16 +61,14 @@
 	\end{equation}
 
 	Gathering the equations above, we have
-	\begin{equation}
-		\begin{dcases}
-			\frac{ds(t)}{dt} = - \frac{\beta}{N} s(t) i(t) \\
-			\frac{di(t)}{dt} = \frac{\beta}{N} (s(t) - \gamma) i(t) \\
-			\frac{dr(t)}{dt} = \gamma i(t)
-		\end{dcases}
-	\end{equation}
+	\begin{numcases}{}
+		\frac{ds(t)}{dt} = - \frac{\beta}{N} s(t) i(t) \label{eq:dsdt} \\
+		\frac{di(t)}{dt} = \frac{\beta}{N} (s(t) - \gamma) i(t) \label{eq:didt} \\
+		\frac{dr(t)}{dt} = \gamma i(t) \label{eq:drdt}
+	\end{numcases}
 	If we introduce the following transformations of variables
 	\[
-		\tilde{s} = \frac{s}{N}, \tilde{i} = \frac{i}{N}, \tilde{r} = \frac{r}{N}, \tilde{t} = \beta t
+		\tilde{s}(t) = \frac{s(t)}{N}, \tilde{i}(t) = \frac{i(t)}{N}, \tilde{r}(t) = \frac{r(t)}{N}, \tilde{t} = \beta t
 	\]
 	Then system of the equations becomes
 	\begin{equation}
@@ -82,7 +81,27 @@
 	The number $R_0 = \dfrac{\beta}{\gamma}$ is known as the basic reproduction number. The number of infected people increases when $R_0 > 1$ and decreases when $R_0 < 1$.
 	
 	\section{Analytical solution of SIR model}
+	When model is defined, we can solve the system of equations \eqref{eq:dsdt} -- \eqref{eq:drdt}. For simplicity forget about function arguments. Firstly, rewrite the equation \eqref{eq:dsdt} as
+	\begin{equation} \label{eq:dsdt_rewritten}
+		i = - \frac{1}{\tilde{\beta}} (\frac{s'}{s})
+	\end{equation}
+	where $\tilde{\beta} = \dfrac{\beta}{N}$. Then differentiate both sides
+	\begin{equation} \label{eq:di_1}
+		i' = - \frac{1}{\tilde{\beta}} (- \frac{{s'}^2}{s^2} + \frac{s''}{s})
+	\end{equation}
+	Next insert the equation \eqref{eq:dsdt_rewritten} into \eqref{eq:didt}
+	\begin{equation} \label{eq:di_2}
+		i' = -(\tilde{\beta} s - \gamma) \frac{1}{\tilde{\beta}} (\frac{s'}{s})
+	\end{equation}
 
+	\newpage
+	
+	Comparing equations \eqref{eq:di_1} and \eqref{eq:di_2} we have
+	\begin{equation}
+		s \frac{d^2 s}{dt^2} - (\frac{ds}{dt})^2 + (\gamma - \tilde{\beta} s) s \frac{ds}{dt} = 0
+	\end{equation}
+	
+	
 	
 	
 \end{document}
