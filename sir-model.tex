@@ -1,0 +1,88 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=2cm,bmargin=2cm,lmargin=2.5cm,rmargin=1.5cm}
+ 
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{cases}
+
+\title{SIR models for the spread of COVID-19}
+\date{\today}
+\author{
+	Maksim Gordienko \\
+	Alexander Sysoev
+}
+
+\begin{document}
+	\maketitle
+	
+	\section{Introduction}
+	Write smth about covid-19, motivation, SIR model, Kermack
+	and McKendrick etc.
+	
+	\section{Mathematical model of epidemics}
+	Let's consider a group of $N$ people and classify them into these types:
+	\begin{itemize}
+		\item \textbf{S} -- Susceptible
+		\item \textbf{I} -- Infected
+		\item \textbf{R} -- Recovered
+	\end{itemize}
+
+	This is called the SIR model for the spread of epidemic diseases that describes the changes in numbers of the three types of individuals. We denote the number of susceptible persons by $s(t)$, the number of infected individuals by $i(t)$ and the number of recovered people by $r(t)$. The time $t$ is measured in days. Also we suppose that each person is in contact with $m$ persons per day average. Hence the number of contacts between the susceptible and infected people becomes $\frac{m}{N} i(t) s(t)$. If we set the probability of infection for each contact as $p$ then the number of newly infected individuals within $\Delta t$ days becomes
+	\begin{equation}
+		\frac{m}{N} i(t) s(t) p \Delta t
+	\end{equation}
+	in total. Let $\beta = mp$, the number of non-infected people \textbf{(S)} from the $t$-th day to $ (t + \Delta t) $-th day changes as
+	\begin{equation}
+		s(t + \Delta t) - s(t) = - \frac{\beta}{N} s(t) i(t) \Delta t
+	\end{equation}
+	When $\Delta t \rightarrow 0 $, we can rewrite it as differential equation
+	\begin{equation}
+		\frac{ds(t)}{dt} = - \frac{\beta}{N} s(t) i(t)
+	\end{equation}
+	Meanwhile, the infected individuals recover at a removal rate $ \gamma $ per day. Subsequently, increase in the number of the recovered persons becomes
+	\begin{equation}
+		\frac{dr(t)}{dt} = \gamma i(t)
+	\end{equation}
+	Respectively, $ \dfrac{1}{\gamma} $ is the expected duration of infection. Also the number of recovered people includes the amount of deceased persons because they cannot possibly infect others.
+	
+	\newpage
+	
+	As well as the total number of individuals is $N$, we can express $i(t)$
+	\begin{equation}
+		i(t) = N - s(t) - r(t)
+	\end{equation}
+	The change in the number of infected people can be written as
+	\begin{equation}
+		\frac{di(t)}{dt} = - \frac{ds(t)}{dt} - \frac{dr(t)}{dt} = \frac{\beta}{N} s(t) i(t) - \gamma i(t) = \frac{\beta}{N} (s(t) - \gamma) i(t)
+	\end{equation}
+
+	Gathering the equations above, we have
+	\begin{equation}
+		\begin{dcases}
+			\frac{ds(t)}{dt} = - \frac{\beta}{N} s(t) i(t) \\
+			\frac{di(t)}{dt} = \frac{\beta}{N} (s(t) - \gamma) i(t) \\
+			\frac{dr(t)}{dt} = \gamma i(t)
+		\end{dcases}
+	\end{equation}
+	If we introduce the following transformations of variables
+	\[
+		\tilde{s} = \frac{s}{N}, \tilde{i} = \frac{i}{N}, \tilde{r} = \frac{r}{N}, \tilde{t} = \beta t
+	\]
+	Then system of the equations becomes
+	\begin{equation}
+		\begin{dcases}
+			\frac{d \tilde{s} (t)}{d \tilde{t}} = - \tilde{s}(t) \tilde{i}(t) \\
+			\frac{d \tilde{i}(t)}{d \tilde{t}} = (\tilde{s}(t) - \frac{1}{R_0}) \tilde{i}(t) \\
+			\frac{d \tilde{r}(t)}{d \tilde{t}} = \frac{1}{R_0} \tilde{i}(t)
+		\end{dcases}
+	\end{equation}
+	The number $R_0 = \dfrac{\beta}{\gamma}$ is known as the basic reproduction number. The number of infected people increases when $R_0 > 1$ and decreases when $R_0 < 1$.
+	
+	\section{Analytical solution of SIR model}
+
+	
+	
+\end{document}
