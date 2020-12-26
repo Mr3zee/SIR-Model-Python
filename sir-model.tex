@@ -59,13 +59,20 @@
 	\begin{equation}
 		\frac{di(t)}{dt} = - \frac{ds(t)}{dt} - \frac{dr(t)}{dt} = \frac{\beta}{N} s(t) i(t) - \gamma i(t) = \frac{\beta}{N} (s(t) - \gamma) i(t)
 	\end{equation}
-
 	Gathering the equations above, we have
 	\begin{numcases}{}
 		\frac{ds(t)}{dt} = - \frac{\beta}{N} s(t) i(t) \label{eq:dsdt} \\
 		\frac{di(t)}{dt} = \frac{\beta}{N} (s(t) - \gamma) i(t) \label{eq:didt} \\
 		\frac{dr(t)}{dt} = \gamma i(t) \label{eq:drdt}
 	\end{numcases}
+	As initial conditions, we use
+	\begin{equation} \label{eq:init_cond}
+		\begin{dcases}
+			s(0) = N_1 \\
+			i(0) = N_2 \\
+			r(0) = 0
+		\end{dcases}
+	\end{equation}
 	If we introduce the following transformations of variables
 	\[
 		\tilde{s}(t) = \frac{s(t)}{N}, \tilde{i}(t) = \frac{i(t)}{N}, \tilde{r}(t) = \frac{r(t)}{N}, \tilde{t} = \beta t
@@ -97,10 +104,85 @@
 	\newpage
 	
 	Comparing equations \eqref{eq:di_1} and \eqref{eq:di_2} we have
-	\begin{equation}
+	\begin{equation} \label{eq:dsdt_combined}
 		s \frac{d^2 s}{dt^2} - (\frac{ds}{dt})^2 + (\gamma - \tilde{\beta} s) s \frac{ds}{dt} = 0
 	\end{equation}
+	Now we introduce the following function
+	\begin{equation} \label{eq:phi_intro}
+		\phi = \frac{dt}{ds}
+	\end{equation}
+	Afterward \eqref{eq:dsdt_combined} becomes
+	\begin{equation}
+		\frac{d \phi}{ds} + \frac{\phi}{s} = (\gamma - \tilde{\beta} s)\phi^2
+	\end{equation}
+	This is a Bernoulli differential equation. Divide both parts by $ \phi^2 $
+	\begin{equation}
+		\frac{\phi'}{\phi^2} + \frac{1}{\phi s} = \gamma - \tilde{\beta} s
+	\end{equation}
+	Then make a substitution
+	\begin{equation}
+		z = \frac{1}{\phi}, z' = -\frac{\phi'}{\phi^2}
+	\end{equation}
+	Now solve the first-order linear ordinary equation
+	\begin{equation}
+		-z' + \frac{z}{s} = \gamma - \tilde{\beta} s 
+	\end{equation}
+	with general solution where $C$ is constant
+	\begin{equation}
+		z = -\gamma s \ln{s} + \tilde{\beta} s^2 + Cs
+	\end{equation}
+	Returning back to $\phi$
+	\begin{equation} \label{eq:phi_res}
+		\phi = \frac{1}{s(C - \gamma \ln{s} + \tilde{\beta} s)}
+	\end{equation}
+	From the relation of inverse function in equation \eqref{eq:phi_intro}, we have
+	\begin{equation}
+		\frac{1}{\phi} = \frac{ds}{dt}
+	\end{equation}
+	Using equation \eqref{eq:dsdt}, we obtain
+	\begin{equation} \label{eq:it_def}
+		i(t) = -\frac{1}{\tilde{\beta}} (C - \gamma \ln{s(t)} + \tilde{\beta} s(t))
+	\end{equation}
+	Moreover, from equations \eqref{eq:dsdt} and \eqref{eq:drdt}, we get
+	\begin{equation}
+		\frac{dr}{dt} = -\frac{\gamma}{\tilde{\beta}} (\frac{s'}{s})
+	\end{equation}
+	Subsequently, the relation between s(t) and r(t) becomes
+	\begin{equation} \label{eq:rt_def}
+		r(t) = -\frac{\gamma}{\tilde{\beta}} \ln{\frac{s(t)}{C_1}}
+	\end{equation}
+	where $C_1$ is a constant. According to our initial conditions \eqref{eq:init_cond} 
+	\begin{equation}
+		C_1 = N_1
+	\end{equation}
+
+	\newpage
 	
+	From the relation $s(0) + i(0) + r(0) = N$, we have
+	\begin{equation}
+		C = -\tilde{\beta}N + \gamma \ln{N_1}
+	\end{equation}
+	If we substitute $C$ into equation \eqref{eq:phi_res}, we obtain
+	\begin{equation}
+		\frac{dt}{ds} = \frac{1}{s(-\tilde{\beta}N - \gamma \ln{\dfrac{s}{N_1} + \tilde{\beta}s})}
+	\end{equation}
+	Integrate this and express $t$ as a function of $s$
+	\begin{equation} \label{eq:t_eps}
+		t = \int_{s(0)}^{s(t)} \frac{d \varepsilon}{\varepsilon(-\tilde{\beta}N - \gamma \ln{\dfrac{\varepsilon}{N_1}} + \tilde{\beta} \varepsilon)}
+	\end{equation}
+	For convenience, we change a variable
+	\begin{equation}
+		\xi = \frac{\varepsilon}{N_1}
+	\end{equation}
+	Rewrite the equation \eqref{eq:t_eps}
+	\begin{equation}
+		t(s) = \int_{1}^{\frac{s(t)}{N_1}} \frac{d \xi}{\xi(-\beta - \gamma \ln{\xi} + \beta \xi \frac{N_1}{N})}		
+	\end{equation}
+	Now we can calculate $t(s)$ using numerical integration with a small step size and $s(t)$ as a parameter like that
+	\begin{equation}
+		\int_{a}^{b} f(\xi) \,d\xi \simeq \sum_{i=0}^{n-1} f(a + ih)h,~ \text{where} ~ h = \frac{b-a}{n}
+	\end{equation}
+	If $t(s)$ is obtained, then $i(t)$ and $r(t)$ can be calculated from equations \eqref{eq:it_def} and \eqref{eq:rt_def} respectively.
 	
 	
 	
