@@ -3,7 +3,7 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
 
-class InitialConditions:
+class SirInitConditions:
     def __init__(self,
                  total_people,
                  initial_susceptible_people,
@@ -58,48 +58,235 @@ class InitialConditions:
 
 
 class SirModel:
-    def __init__(self, initial_conditions):
-        self.init_cond = initial_conditions
-        self.sir0 = [self.init_cond.n1(), self.init_cond.n2(), self.init_cond.n3()]
+    def __init__(self, init_cond):
+        self.ic = init_cond
+        self.sir0 = [self.ic.n1(), self.ic.n2(), self.ic.n3()]
 
     def __sir_classic(self, sir, t):
         s = sir[0]
         i = sir[1]
         r = sir[2]
-        dsdt = -self.init_cond.beta_tilde() * s * i
-        didt = (self.init_cond.beta_tilde() * s - self.init_cond.gamma()) * i
-        drdt = self.init_cond.gamma() * i
+        dsdt = -self.ic.beta_tilde() * s * i
+        didt = (self.ic.beta_tilde() * s - self.ic.gamma()) * i
+        drdt = self.ic.gamma() * i
         return [dsdt, didt, drdt]
 
     def __sir_vital_dynamics(self, sir, t):
         s = sir[0]
         i = sir[1]
         r = sir[2]
-        dsdt = -self.init_cond.beta_tilde() * s * i + self.init_cond.d() * (self.init_cond.n() - s)
-        didt = (self.init_cond.beta_tilde() * s - self.init_cond.gamma() - self.init_cond.d()) * i
-        drdt = self.init_cond.gamma() * i - self.init_cond.d() * r
+        dsdt = -self.ic.beta_tilde() * s * i + self.ic.d() * (self.ic.n() - s)
+        didt = (self.ic.beta_tilde() * s - self.ic.gamma() - self.ic.d()) * i
+        drdt = self.ic.gamma() * i - self.ic.d() * r
         return [dsdt, didt, drdt]
 
-    def solve_classic(self, time_linspace):
+    def solve_sir(self, time_linspace):
         return odeint(self.__sir_classic, self.sir0, time_linspace)
 
-    def solve_vital_dynamics(self, time_linspace):
+    def solve_sir_vital_dynamics(self, time_linspace):
         return odeint(self.__sir_vital_dynamics, self.sir0, time_linspace)
 
 
-# example
-init_cond = InitialConditions(100000, 99900, 10, 90, 5, 0.1, 0.2, 0.02)
-model = SirModel(init_cond)
-time_linspace = np.linspace(0, 365, 10000)
-sir_classic = model.solve_classic(time_linspace)
-sir_with_vital_dynamics = model.solve_vital_dynamics(time_linspace)
+class MseirsInitConditions:
+    def __init__(self,
+                 total_people,
+                 initial_susceptible,
+                 initial_exposed,
+                 initial_symptomatic_infected,
+                 initial_asymptomatic_infected,
+                 initial_quarantined,
+                 initial_icu,
+                 initial_carrier,
+                 initial_recovered_without_disability,
+                 initial_deceased,
+                 initial_recovered_with_disability,
+                 disease_transmission_rate,
+                 recovered_lose_immunity_rate,
+                 average_incubation_period,
+                 reinfected_carriers_rate,
+                 exposed_to_symptomatic_infected_rate,
+                 infected_to_quarantined_rate,
+                 infected_to_deceased_rate,
+                 infected_to_disabled_rate,
+                 asymptomatic_recovery_rate,
+                 asymptomatic_death_rate,
+                 asymptomatic_disability_rate,
+                 quarantined_to_carrier_rate,
+                 quarantined_to_icu_rate,
+                 quarantined_to_deceased_rate,
+                 quarantined_to_disabled_rate,
+                 quarantined_recovery_rate,
+                 icu_recover_rate,
+                 icu_die_rate,
+                 icu_disable_rate,
+                 carrier_recover_rate,
+                 carrier_die_rate,
+                 carrier_disable_rate):
+        self.initial_susceptible = initial_susceptible
+        self.total_people = total_people
+        self.disease_transmission_rate = disease_transmission_rate
+        self.initial_recovered_with_disability = initial_recovered_with_disability
+        self.initial_deceased = initial_deceased
+        self.initial_recovered_without_disability = initial_recovered_without_disability
+        self.initial_carrier = initial_carrier
+        self.initial_icu = initial_icu
+        self.initial_quarantined = initial_quarantined
+        self.initial_asymptomatic_infected = initial_asymptomatic_infected
+        self.initial_symptomatic_infected = initial_symptomatic_infected
+        self.initial_exposed = initial_exposed
+        self.carried_disable_rate = carrier_disable_rate
+        self.carrier_die_rate = carrier_die_rate
+        self.carrier_recover_rate = carrier_recover_rate
+        self.icu_disable_rate = icu_disable_rate
+        self.icu_die_rate = icu_die_rate
+        self.icu_recover_rate = icu_recover_rate
+        self.quarantined_recovery_rate = quarantined_recovery_rate
+        self.quarantined_to_disabled_rate = quarantined_to_disabled_rate
+        self.quarantined_to_deceased_rate = quarantined_to_deceased_rate
+        self.quarantined_to_icu_rate = quarantined_to_icu_rate
+        self.quarantined_to_carrier_rate = quarantined_to_carrier_rate
+        self.asymptomatic_disability_rate = asymptomatic_disability_rate
+        self.asymptomatic_death_rate = asymptomatic_death_rate
+        self.asymptomatic_recovery_rate = asymptomatic_recovery_rate
+        self.infected_to_disabled_rate = infected_to_disabled_rate
+        self.infected_to_deceased_rate = infected_to_deceased_rate
+        self.infected_to_quarantined_rate = infected_to_quarantined_rate
+        self.exposed_to_symptomatic_infected_rate = exposed_to_symptomatic_infected_rate
+        self.reinfected_carriers_rate = reinfected_carriers_rate
+        self.average_incubation_period = average_incubation_period
+        self.recovered_lose_immunity_rate = recovered_lose_immunity_rate
 
-for i in range(3):
-    plt.plot(time_linspace, sir_with_vital_dynamics[:, i])
-    # plt.xlim(0, 100)
-    # plt.ylim(0, 10000)
-    plt.xlabel('time')
-    plt.ylabel('i = ' + str(i))
-    plt.grid(True)
-    plt.title('SIR model with vital dynamics. S(i = 0), I(i = 1), R(i = 2)')
-    plt.show()
+    def n(self):
+        return self.total_people
+
+    def n1(self):
+        return self.initial_susceptible
+
+    def n2(self):
+        return self.initial_exposed
+
+    def n3(self):
+        return self.initial_symptomatic_infected
+
+    def n4(self):
+        return self.initial_asymptomatic_infected
+
+    def n5(self):
+        return self.initial_quarantined
+
+    def n6(self):
+        return self.initial_icu
+
+    def n7(self):
+        return self.initial_carrier
+
+    def n8(self):
+        return self.initial_recovered_without_disability
+
+    def n9(self):
+        return self.initial_deceased
+
+    def n10(self):
+        return self.initial_recovered_with_disability
+
+    def alpha(self):
+        return self.disease_transmission_rate
+
+    def g(self):
+        return self.recovered_lose_immunity_rate
+
+    def mu(self):
+        return self.average_incubation_period
+
+    def f(self):
+        return self.reinfected_carriers_rate
+
+    def r(self):
+        return self.exposed_to_symptomatic_infected_rate
+
+    def eps(self):
+        return self.infected_to_quarantined_rate
+
+    def xi_1(self):
+        return self.infected_to_deceased_rate
+
+    def eta_1(self):
+        return self.infected_to_disabled_rate
+
+    def beta_3(self):
+        return self.asymptomatic_recovery_rate
+
+    def xi_3(self):
+        return self.asymptomatic_death_rate
+
+    def eta_3(self):
+        return self.asymptomatic_disability_rate
+
+    def v(self):
+        return self.quarantined_to_carrier_rate
+
+    def ro(self):
+        return self.quarantined_to_icu_rate
+
+    def xi_2(self):
+        return self.quarantined_to_deceased_rate
+
+    def eta_2(self):
+        return self.quarantined_to_disabled_rate
+
+    def beta_1(self):
+        return self.quarantined_recovery_rate
+
+    def beta_4(self):
+        return self.icu_recover_rate
+
+    def xi_5(self):
+        return self.icu_die_rate
+
+    def eta_5(self):
+        return self.icu_disable_rate
+
+    def beta_2(self):
+        return self.carrier_recover_rate
+
+    def xi_4(self):
+        return self.carrier_die_rate
+
+    def eta_4(self):
+        return self.carried_disable_rate
+
+
+class MseirsModel:
+    def __init__(self, mseirs_init_cond):
+        self.ic = mseirs_init_cond
+        self.mseirs0 = [self.ic.n1(), self.ic.n2(), self.ic.n3(), self.ic.n4(), self.ic.n5(), self.ic.n6(),
+                        self.ic.n7(), self.ic.n8(), self.ic.n9(), self.ic.n10()]
+
+    def __mseirs(self, mseirs, t):
+        s = mseirs[0]
+        e = mseirs[1]
+        i_s = mseirs[2]
+        i_as = mseirs[3]
+        q = mseirs[4]
+        q_ap = mseirs[5]
+        c = mseirs[6]
+        r_wd = mseirs[7]
+        d = mseirs[8]
+        r_d = mseirs[9]
+
+        dsdt = -self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) + self.ic.g() * r_wd
+        dedt = self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) - self.ic.mu() * e
+        di_sdt = self.ic.r() * self.ic.mu() * e - self.ic.eps() * i_s + self.ic.f() * c - self.ic.xi_1() * i_s - self.ic.eta_1() * i_s
+        di_asdt = (
+                          1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
+        dqdt = self.ic.eps() * i_s - self.ic.beta_1() * q - self.ic.v() * q - self.ic.ro() * q - self.ic.xi_2() * q - self.ic.eta_2() * q
+        dq_apdt = self.ic.ro() * q - self.ic.beta_4() * q_ap - self.ic.xi_5() * q_ap - self.ic.eta_5() * q_ap
+        dcdt = self.ic.v() * q - self.ic.f() * c - self.ic.beta_2() * c - self.ic.xi_4() * c - self.ic.eta_4() * c
+        dr_wddt = self.ic.beta_1() * q + self.ic.beta_3() * i_as + self.ic.beta_2() * c - self.ic.g() * r_wd
+        dddt = self.ic.xi_1() * i_s + self.ic.xi_2() * q + self.ic.xi_3() * i_as + self.ic.xi_4() * c + self.ic.xi_5() * q_ap
+        drddt = self.ic.eta_1() * i_s + self.ic.eta_2() * q + self.ic.eta_3() * i_as + self.ic.eta_4() * c + self.ic.eta_5() * q_ap
+
+        return [dsdt, dedt, di_sdt, di_asdt, dqdt, dq_apdt, dcdt, dr_wddt, dddt, drddt]
+
+    def solve_mseirs(self, time_linspace):
+        return odeint(self.__mseirs, self.mseirs0, time_linspace)
