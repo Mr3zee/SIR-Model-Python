@@ -1,6 +1,4 @@
-import numpy as np
 from scipy.integrate import odeint
-import matplotlib.pyplot as plt
 
 
 class SirInitConditions:
@@ -60,7 +58,6 @@ class SirInitConditions:
 class SirModel:
     def __init__(self, init_cond):
         self.ic = init_cond
-        self.sir0 = [self.ic.n1(), self.ic.n2(), self.ic.n3()]
 
     def __sir_classic(self, sir, t):
         s = sir[0]
@@ -81,10 +78,12 @@ class SirModel:
         return [dsdt, didt, drdt]
 
     def solve_sir(self, time_linspace):
-        return odeint(self.__sir_classic, self.sir0, time_linspace)
+        sir0 = [self.ic.n1(), self.ic.n2(), self.ic.n3()]
+        return odeint(self.__sir_classic, sir0, time_linspace)
 
     def solve_sir_vital_dynamics(self, time_linspace):
-        return odeint(self.__sir_vital_dynamics, self.sir0, time_linspace)
+        sir0 = [self.ic.n1(), self.ic.n2(), self.ic.n3()]
+        return odeint(self.__sir_vital_dynamics, sir0, time_linspace)
 
 
 class MseirsInitConditions:
