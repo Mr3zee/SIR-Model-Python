@@ -1,21 +1,21 @@
+from abc import ABC, abstractmethod
+
 from scipy.integrate import odeint
 
 
 class SirInitConditions:
     def __init__(self,
                  total_people,
-                 initial_susceptible_people,
                  initial_infected_people,
-                 initial_recovered_people,
                  contacts_per_day,
                  prob_of_infection_for_contact,
                  recover_rate,
                  birth_death_rate):
         # validate it
         self.total_people = total_people
-        self.initial_susceptible_people = initial_susceptible_people
+        self.initial_susceptible_people = total_people - initial_infected_people
         self.initial_infected_people = initial_infected_people
-        self.initial_recovered_people = initial_recovered_people
+        self.initial_recovered_people = 0
         self.contacts_per_day = contacts_per_day
         self.prob_of_infection_for_contact = prob_of_infection_for_contact
         self.recover_rate = recover_rate
@@ -55,35 +55,50 @@ class SirInitConditions:
         return self.beta() / self.n()
 
 
-class SirModel:
+class Model(ABC):
+    ic = None
+
     def __init__(self, init_cond):
         self.ic = init_cond
 
-    def __sir_classic(self, sir, t):
-        s = sir[0]
-        i = sir[1]
-        r = sir[2]
+    @abstractmethod
+    def _get_start_conditions(self):
+        pass
+
+    @abstractmethod
+    def _model(self, sir0, t):
+        pass
+
+    def solve(self, time_linspace):
+        return odeint(self._model, self._get_start_conditions(), time_linspace)
+
+
+class SirModel(Model, ABC):
+    def _get_start_conditions(self):
+        return [self.ic.n1(), self.ic.n2(), self.ic.n3()]
+
+    def _model(self, sir0, t):
+        s = sir0[0]
+        i = sir0[1]
+        r = sir0[2]
         dsdt = -self.ic.beta_tilde() * s * i
         didt = (self.ic.beta_tilde() * s - self.ic.gamma()) * i
         drdt = self.ic.gamma() * i
         return [dsdt, didt, drdt]
 
-    def __sir_vital_dynamics(self, sir, t):
-        s = sir[0]
-        i = sir[1]
-        r = sir[2]
+
+class SirVital(Model, ABC):
+    def _get_start_conditions(self):
+        return [self.ic.n1(), self.ic.n2(), self.ic.n3()]
+
+    def _model(self, sir0, t):
+        s = sir0[0]
+        i = sir0[1]
+        r = sir0[2]
         dsdt = -self.ic.beta_tilde() * s * i + self.ic.d() * (self.ic.n() - s)
         didt = (self.ic.beta_tilde() * s - self.ic.gamma() - self.ic.d()) * i
         drdt = self.ic.gamma() * i - self.ic.d() * r
         return [dsdt, didt, drdt]
-
-    def solve_sir(self, time_linspace):
-        sir0 = [self.ic.n1(), self.ic.n2(), self.ic.n3()]
-        return odeint(self.__sir_classic, sir0, time_linspace)
-
-    def solve_sir_vital_dynamics(self, time_linspace):
-        sir0 = [self.ic.n1(), self.ic.n2(), self.ic.n3()]
-        return odeint(self.__sir_vital_dynamics, sir0, time_linspace)
 
 
 class MseirsInitConditions:
@@ -255,13 +270,13 @@ class MseirsInitConditions:
         return self.carried_disable_rate
 
 
-class MseirsModel:
-    def __init__(self, mseirs_init_cond):
-        self.ic = mseirs_init_cond
-        self.mseirs0 = [self.ic.n1(), self.ic.n2(), self.ic.n3(), self.ic.n4(), self.ic.n5(), self.ic.n6(),
-                        self.ic.n7(), self.ic.n8(), self.ic.n9(), self.ic.n10()]
+class MseirsModel(Model, ABC):
 
-    def __mseirs(self, mseirs, t):
+    def _get_start_conditions(self):
+        return [self.ic.n1(), self.ic.n2(), self.ic.n3(), self.ic.n4(), self.ic.n5(), self.ic.n6(),
+         self.ic.n7(), self.ic.n8(), self.ic.n9(), self.ic.n10()]
+
+    def _model(self, mseirs, t):
         s = mseirs[0]
         e = mseirs[1]
         i_s = mseirs[2]
@@ -286,6 +301,3 @@ class MseirsModel:
         drddt = self.ic.eta_1() * i_s + self.ic.eta_2() * q + self.ic.eta_3() * i_as + self.ic.eta_4() * c + self.ic.eta_5() * q_ap
 
         return [dsdt, dedt, di_sdt, di_asdt, dqdt, dq_apdt, dcdt, dr_wddt, dddt, drddt]
-
-    def solve_mseirs(self, time_linspace):
-        return odeint(self.__mseirs, self.mseirs0, time_linspace)
