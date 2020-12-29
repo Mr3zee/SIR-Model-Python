@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from model import SirModel, SirInitConditions, Model, SirVital
+from model import SirModel, SirInitConditions, Model, SirVital, MseirsInitConditions, MseirsModel
 import sliders
 
 
@@ -25,7 +25,7 @@ def sir_model(fig: Figure, ax: Axes):
         outlines=["g-", "y--", "r-"],
         labels=["S", "I", "R"],
         sliders_setter=sliders.sir_sliders,
-        xlabel="Time, days", ylabel="s(t), i(t), r(t)", title="SIR Model"
+        xlabel="Time, days", ylabel="Population", title="SIR Model"
     )
 
 
@@ -48,7 +48,56 @@ def sir_vital(fig: Figure, ax: Axes):
         outlines=["g-", "y--", "r-"],
         labels=["S", "I", "R"],
         sliders_setter=sliders.sir_sliders_vital,
-        xlabel="Time, days", ylabel="s(t), i(t), r(t)", title="SIR Model With Vital Dynamics"
+        xlabel="Time, days", ylabel="Population", title="SIR Model With Vital Dynamics"
+    )
+
+
+def mseiers_model(fig: Figure, ax: Axes):
+    init_cond = MseirsInitConditions(
+        total_people=1,
+        initial_susceptible=0.9,
+        initial_exposed=0,
+        initial_symptomatic_infected=0.1,
+        initial_asymptomatic_infected=0,
+        initial_quarantined=0,
+        initial_icu=0,
+        initial_carrier=0,
+        initial_recovered_without_disability=0,
+        initial_deceased=0,
+        initial_recovered_with_disability=0,
+        disease_transmission_rate=0.42,  # alpha
+        recovered_lose_immunity_rate=0.0001,  # g
+        average_incubation_period=0.5,  # mu
+        reinfected_carriers_rate=0.2,  # f
+        exposed_to_symptomatic_infected_rate=0.3,  # r
+        infected_to_quarantined_rate=0.5,  # epsilon
+        infected_to_deceased_rate=0.25,  # zetta1
+        infected_to_disabled_rate=0.1,  # eta1
+        asymptomatic_recovery_rate=0.1458,  # beta3
+        asymptomatic_death_rate=0.1,  # zetta3
+        asymptomatic_disability_rate=0.05,  # eta3
+        quarantined_to_carrier_rate=0.05,  # v
+        quarantined_to_icu_rate=0.01,  # ro
+        quarantined_to_deceased_rate=0.2,  # zetta2
+        quarantined_to_disabled_rate=0.1,  # eta2
+        quarantined_recovery_rate=0.5,  # beta1
+        icu_recover_rate=0.05,  # beta4
+        icu_die_rate=0.2,  # zetta5
+        icu_disable_rate=0.1,  # eta5
+        carrier_recover_rate=0.1458,  # beta2
+        carrier_die_rate=0.05,  # zetta4
+        carrier_disable_rate=0.01,  # eta4
+    )
+
+    build_model(
+        fig=fig, ax=ax,
+        init_cond=init_cond,
+        update_init_cond=None,
+        model=MseirsModel(init_cond),
+        outlines=["g-", "b-", "y-", "y--", "r--", "r-", "c-", "k:", "k-", "k--"],
+        labels=["S", "E", "I_s", "I_as", "Q", "Q'", "C", "R_wd", "D", "R_d"],
+        sliders_setter=None,
+        xlabel="Time, days", ylabel="Population", title="MSEIRS Model"
     )
 
 
@@ -64,7 +113,8 @@ def build_model(
         xlabel, ylabel, title,
 ):
     def update(val):
-        update_init_cond(init_cond)
+        if update_init_cond is not None:
+            update_init_cond(init_cond)
 
         model.ic = init_cond
         for plot, data in zip(plots, list(model.solve(time_axis).T)):
@@ -81,4 +131,5 @@ def build_model(
     ax.legend(loc="upper right")
     ax.set_title(title)
 
-    sliders_setter(fig, init_cond, update)
+    if sliders_setter is not None:
+        sliders_setter(fig, init_cond, update)

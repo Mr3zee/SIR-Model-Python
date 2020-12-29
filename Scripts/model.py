@@ -102,40 +102,42 @@ class SirVital(Model, ABC):
 
 
 class MseirsInitConditions:
-    def __init__(self,
-                 total_people,
-                 initial_susceptible,
-                 initial_exposed,
-                 initial_symptomatic_infected,
-                 initial_asymptomatic_infected,
-                 initial_quarantined,
-                 initial_icu,
-                 initial_carrier,
-                 initial_recovered_without_disability,
-                 initial_deceased,
-                 initial_recovered_with_disability,
-                 disease_transmission_rate,
-                 recovered_lose_immunity_rate,
-                 average_incubation_period,
-                 reinfected_carriers_rate,
-                 exposed_to_symptomatic_infected_rate,
-                 infected_to_quarantined_rate,
-                 infected_to_deceased_rate,
-                 infected_to_disabled_rate,
-                 asymptomatic_recovery_rate,
-                 asymptomatic_death_rate,
-                 asymptomatic_disability_rate,
-                 quarantined_to_carrier_rate,
-                 quarantined_to_icu_rate,
-                 quarantined_to_deceased_rate,
-                 quarantined_to_disabled_rate,
-                 quarantined_recovery_rate,
-                 icu_recover_rate,
-                 icu_die_rate,
-                 icu_disable_rate,
-                 carrier_recover_rate,
-                 carrier_die_rate,
-                 carrier_disable_rate):
+    def __init__(
+            self,
+            total_people,
+            initial_susceptible,
+            initial_exposed,
+            initial_symptomatic_infected,
+            initial_asymptomatic_infected,
+            initial_quarantined,
+            initial_icu,
+            initial_carrier,
+            initial_recovered_without_disability,
+            initial_deceased,
+            initial_recovered_with_disability,
+            disease_transmission_rate,
+            recovered_lose_immunity_rate,
+            average_incubation_period,
+            reinfected_carriers_rate,
+            exposed_to_symptomatic_infected_rate,
+            infected_to_quarantined_rate,
+            infected_to_deceased_rate,
+            infected_to_disabled_rate,
+            asymptomatic_recovery_rate,
+            asymptomatic_death_rate,
+            asymptomatic_disability_rate,
+            quarantined_to_carrier_rate,
+            quarantined_to_icu_rate,
+            quarantined_to_deceased_rate,
+            quarantined_to_disabled_rate,
+            quarantined_recovery_rate,
+            icu_recover_rate,
+            icu_die_rate,
+            icu_disable_rate,
+            carrier_recover_rate,
+            carrier_die_rate,
+            carrier_disable_rate
+    ):
         self.initial_susceptible = initial_susceptible
         self.total_people = total_people
         self.disease_transmission_rate = disease_transmission_rate
@@ -274,7 +276,7 @@ class MseirsModel(Model, ABC):
 
     def _get_start_conditions(self):
         return [self.ic.n1(), self.ic.n2(), self.ic.n3(), self.ic.n4(), self.ic.n5(), self.ic.n6(),
-         self.ic.n7(), self.ic.n8(), self.ic.n9(), self.ic.n10()]
+                self.ic.n7(), self.ic.n8(), self.ic.n9(), self.ic.n10()]
 
     def _model(self, mseirs, t):
         s = mseirs[0]
@@ -291,8 +293,7 @@ class MseirsModel(Model, ABC):
         dsdt = -self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) + self.ic.g() * r_wd
         dedt = self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) - self.ic.mu() * e
         di_sdt = self.ic.r() * self.ic.mu() * e - self.ic.eps() * i_s + self.ic.f() * c - self.ic.xi_1() * i_s - self.ic.eta_1() * i_s
-        di_asdt = (
-                          1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
+        di_asdt = (1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
         dqdt = self.ic.eps() * i_s - self.ic.beta_1() * q - self.ic.v() * q - self.ic.ro() * q - self.ic.xi_2() * q - self.ic.eta_2() * q
         dq_apdt = self.ic.ro() * q - self.ic.beta_4() * q_ap - self.ic.xi_5() * q_ap - self.ic.eta_5() * q_ap
         dcdt = self.ic.v() * q - self.ic.f() * c - self.ic.beta_2() * c - self.ic.xi_4() * c - self.ic.eta_4() * c

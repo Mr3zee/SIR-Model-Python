@@ -23,6 +23,8 @@ def make_model(fig: Figure, ax: Axes):
         plot.sir_model(fig, ax)
     elif args[1] == "sir-vital":
         plot.sir_vital(fig, ax)
+    elif args[1] == "mseirs-model":
+        plot.mseiers_model(fig, ax)
     else:
         return -1
     return 0
