@@ -241,6 +241,22 @@
 	\begin{equation}
 		r r' = \xi(s)r + \eta(s)
 	\end{equation}
+
+	\newpage
+	
+	\section{Modeling COVID-19 spread}
+	In order to create lifelike COVID-19 pandemic model we need to introduce more parameters and consider spread cases.
+	\begin{itemize}
+		\item \textbf{$S$} -- Susceptible. Includes all individuals who are not infected but are susceptible to contract the disease.
+		\item \textbf{$E$} -- Exposed. Includes all persons who are exposed to infection, but not yet infections. Some of them might fall ill and some may not. We introduced that component due to incubation period of COVID-19 pandemic (approximated 5-6 days by WHO).
+		\item \textbf{$I_s$} -- Symptomatic infected. It includes all the individuals who were symptomatic and infectious. They have approached some health-care facility, but have not yet been quarantined. This compartment was brought into the picture considering concerning news from worst-affected counties like Italy and the U.S. of the hospitals and health-care centers getting filled up very fast during this pandemic. A significant portion of the infected individuals may not be quarantined in case of the health-care system collapses.
+		\item \textbf{$I_{as}$} -- Asymptomatic infected. It includes all those people who are affected but asymptomatic before they either recover or die or get permanently disabled. This compartment was formalized keeping after
+		reports of various authentic studies claiming that around 30-40 percent of the infected individuals remain
+		asymptomatic.
+		
+	\end{itemize}
+	
+	
 	
 	
 \end{document}
