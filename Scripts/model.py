@@ -5,6 +5,7 @@ from scipy.integrate import odeint
 
 class SirInitConditions:
     def __init__(self,
+                 t,
                  total_people,
                  initial_infected_people,
                  contacts_per_day,
@@ -12,6 +13,7 @@ class SirInitConditions:
                  recover_rate,
                  birth_death_rate):
         # validate it
+        self.t = t
         self.total_people = total_people
         self.initial_susceptible_people = total_people - initial_infected_people
         self.initial_infected_people = initial_infected_people
@@ -104,6 +106,7 @@ class SirVital(Model, ABC):
 class MseirsInitConditions:
     def __init__(
             self,
+            t,
             total_people,
             initial_susceptible,
             initial_exposed,
@@ -138,6 +141,7 @@ class MseirsInitConditions:
             carrier_die_rate,
             carrier_disable_rate
     ):
+        self.t = t
         self.initial_susceptible = initial_susceptible
         self.total_people = total_people
         self.disease_transmission_rate = disease_transmission_rate

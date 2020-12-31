@@ -6,9 +6,10 @@ from model import SirModel, SirInitConditions, Model, SirVital, MseirsInitCondit
 import sliders
 
 
-def sir_model(fig: Figure, ax: Axes):
+def sir_model(fig: Figure):
 
     init_cond = SirInitConditions(
+        t=50,
         total_people=10000,
         initial_infected_people=10,
         contacts_per_day=3,
@@ -18,8 +19,8 @@ def sir_model(fig: Figure, ax: Axes):
     )
 
     build_model(
-        fig=fig, ax=ax,
-        init_cond=init_cond,
+        fig=fig, plot_position=[0.10, 0.35, 0.8, 0.6],
+        init_cond=init_cond, t=50,
         update_init_cond=sliders.update_sir(init_cond),
         model=SirModel(init_cond),
         outlines=["g-", "y--", "r-"],
@@ -29,20 +30,21 @@ def sir_model(fig: Figure, ax: Axes):
     )
 
 
-def sir_vital(fig: Figure, ax: Axes):
+def sir_vital(fig: Figure):
 
     init_cond = SirInitConditions(
+        t=70,
         total_people=10000,
         initial_infected_people=10,
-        contacts_per_day=3,
-        prob_of_infection_for_contact=0.5,
-        recover_rate=.3,
-        birth_death_rate=0.2,
+        contacts_per_day=5,
+        prob_of_infection_for_contact=0.1,
+        recover_rate=.2,
+        birth_death_rate=0.02,
     )
 
     build_model(
-        fig=fig, ax=ax,
-        init_cond=init_cond,
+        fig=fig, plot_position=[0.10, 0.4, 0.8, 0.55],
+        init_cond=init_cond, t=100,
         update_init_cond=sliders.update_sir_vital(init_cond),
         model=SirVital(init_cond),
         outlines=["g-", "y--", "r-"],
@@ -52,8 +54,9 @@ def sir_vital(fig: Figure, ax: Axes):
     )
 
 
-def mseiers_model(fig: Figure, ax: Axes):
+def mseiers_model(fig: Figure):
     init_cond = MseirsInitConditions(
+        t=50,
         total_people=1,
         initial_susceptible=0.9,
         initial_exposed=0,
@@ -90,8 +93,8 @@ def mseiers_model(fig: Figure, ax: Axes):
     )
 
     build_model(
-        fig=fig, ax=ax,
-        init_cond=init_cond,
+        fig=fig, plot_position=[0.10, 0.35, 0.8, 0.6],
+        init_cond=init_cond, t=50,
         update_init_cond=None,
         model=MseirsModel(init_cond),
         outlines=["g-", "b-", "y-", "y--", "r--", "r-", "c-", "k:", "k-", "k--"],
@@ -103,7 +106,8 @@ def mseiers_model(fig: Figure, ax: Axes):
 
 def build_model(
         fig: Figure,
-        ax: Axes,
+        plot_position: list,
+        t: int,
         init_cond,
         update_init_cond,
         model: Model,
@@ -117,12 +121,17 @@ def build_model(
             update_init_cond(init_cond)
 
         model.ic = init_cond
-        for plot, data in zip(plots, list(model.solve(time_axis).T)):
+        new_time_axis = np.arange(0, int(init_cond.t))
+        for plot, data in zip(plots, list(model.solve(new_time_axis).T)):
             plot.set_ydata(data)
+            plot.set_xdata(new_time_axis)
 
+        ax.axis([0, init_cond.t, 0, init_cond.total_people])
         fig.canvas.draw_idle()
 
-    time_axis = np.arange(0, 50)
+    ax: Axes = fig.add_axes(plot_position)
+
+    time_axis = np.arange(0, t)
     plots = [ax.plot(time_axis, fun, outline, label=label)[0]
              for fun, outline, label in zip(model.solve(time_axis).T, outlines, labels)]
 
