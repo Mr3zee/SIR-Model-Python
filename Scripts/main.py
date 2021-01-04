@@ -2,18 +2,32 @@ import sys
 
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.widgets import Slider
 
 import plot
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_template import FigureManager
 
+
+def add_slider(name, slider):
+    globals()[f'slider_{name}'] = slider
+
+
+def get_val(name):
+    return globals()[f'slider_{name}'].val
+
+
+# BASIC SLIDERS
 slider_initial_infected = None
-slider_contacts = None
-slider_probability = None
-slider_recover = None
-slider_birth_death = None
-slider_time = None
+slider_contacts_per_day = None
+slider_prob_of_infection_for_contact = None
+slider_recover_rate = None
+slider_birth_death_rate = None
+slider_t = None
+
+# SEIRS SLIDERS
+slider_disease_transmission_rate = None
 
 
 def make_model(fig: Figure):
@@ -24,8 +38,8 @@ def make_model(fig: Figure):
         plot.sir_model(fig)
     elif args[1] == "sir-vital":
         plot.sir_vital(fig)
-    elif args[1] == "mseirs-model":
-        plot.mseiers_model(fig)
+    elif args[1] == "seirs-model":
+        plot.seiers_model(fig)
     else:
         return -1
     return 0

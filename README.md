@@ -6,4 +6,4 @@ python main.py [model-name]
 ```
 in your terminal from the project folder
 
-Current models available: `sir-model`, `sir-vital`, `mseirs-model`
+Current models available: `sir-model`, `sir-vital`, `seirs-model`

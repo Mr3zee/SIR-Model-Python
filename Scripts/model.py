@@ -3,15 +3,25 @@ from abc import ABC, abstractmethod
 from scipy.integrate import odeint
 
 
-class SirInitConditions:
-    def __init__(self,
-                 t,
-                 total_people,
-                 initial_infected_people,
-                 contacts_per_day,
-                 prob_of_infection_for_contact,
-                 recover_rate,
-                 birth_death_rate):
+class InitCond:
+    def get(self, item):
+        return getattr(self, item)
+
+    def set(self, item, value):
+        setattr(self, item, value)
+
+
+class SirInitConditions(InitCond):
+    def __init__(
+            self,
+            t,
+            total_people,
+            initial_infected_people,
+            contacts_per_day,
+            prob_of_infection_for_contact,
+            recover_rate,
+            birth_death_rate
+    ):
         # validate it
         self.t = t
         self.total_people = total_people
@@ -103,7 +113,7 @@ class SirVital(Model, ABC):
         return [dsdt, didt, drdt]
 
 
-class MseirsInitConditions:
+class SeirsInitConditions(InitCond):
     def __init__(
             self,
             t,
@@ -135,10 +145,10 @@ class MseirsInitConditions:
             quarantined_to_disabled_rate,
             quarantined_recovery_rate,
             icu_recover_rate,
-            icu_die_rate,
+            icu_death_rate,
             icu_disable_rate,
             carrier_recover_rate,
-            carrier_die_rate,
+            carrier_death_rate,
             carrier_disable_rate
     ):
         self.t = t
@@ -154,11 +164,11 @@ class MseirsInitConditions:
         self.initial_asymptomatic_infected = initial_asymptomatic_infected
         self.initial_symptomatic_infected = initial_symptomatic_infected
         self.initial_exposed = initial_exposed
-        self.carried_disable_rate = carrier_disable_rate
-        self.carrier_die_rate = carrier_die_rate
+        self.carrier_disable_rate = carrier_disable_rate
+        self.carrier_death_rate = carrier_death_rate
         self.carrier_recover_rate = carrier_recover_rate
         self.icu_disable_rate = icu_disable_rate
-        self.icu_die_rate = icu_die_rate
+        self.icu_death_rate = icu_death_rate
         self.icu_recover_rate = icu_recover_rate
         self.quarantined_recovery_rate = quarantined_recovery_rate
         self.quarantined_to_disabled_rate = quarantined_to_disabled_rate
@@ -261,7 +271,7 @@ class MseirsInitConditions:
         return self.icu_recover_rate
 
     def xi_5(self):
-        return self.icu_die_rate
+        return self.icu_death_rate
 
     def eta_5(self):
         return self.icu_disable_rate
@@ -270,34 +280,35 @@ class MseirsInitConditions:
         return self.carrier_recover_rate
 
     def xi_4(self):
-        return self.carrier_die_rate
+        return self.carrier_death_rate
 
     def eta_4(self):
-        return self.carried_disable_rate
+        return self.carrier_disable_rate
 
 
-class MseirsModel(Model, ABC):
+class SeirsModel(Model, ABC):
 
     def _get_start_conditions(self):
         return [self.ic.n1(), self.ic.n2(), self.ic.n3(), self.ic.n4(), self.ic.n5(), self.ic.n6(),
                 self.ic.n7(), self.ic.n8(), self.ic.n9(), self.ic.n10()]
 
-    def _model(self, mseirs, t):
-        s = mseirs[0]
-        e = mseirs[1]
-        i_s = mseirs[2]
-        i_as = mseirs[3]
-        q = mseirs[4]
-        q_ap = mseirs[5]
-        c = mseirs[6]
-        r_wd = mseirs[7]
-        d = mseirs[8]
-        r_d = mseirs[9]
+    def _model(self, seirs, t):
+        s = seirs[0]
+        e = seirs[1]
+        i_s = seirs[2]
+        i_as = seirs[3]
+        q = seirs[4]
+        q_ap = seirs[5]
+        c = seirs[6]
+        r_wd = seirs[7]
+        d = seirs[8]
+        r_d = seirs[9]
 
         dsdt = -self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) + self.ic.g() * r_wd
         dedt = self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) - self.ic.mu() * e
         di_sdt = self.ic.r() * self.ic.mu() * e - self.ic.eps() * i_s + self.ic.f() * c - self.ic.xi_1() * i_s - self.ic.eta_1() * i_s
-        di_asdt = (1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
+        di_asdt = (
+                              1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
         dqdt = self.ic.eps() * i_s - self.ic.beta_1() * q - self.ic.v() * q - self.ic.ro() * q - self.ic.xi_2() * q - self.ic.eta_2() * q
         dq_apdt = self.ic.ro() * q - self.ic.beta_4() * q_ap - self.ic.xi_5() * q_ap - self.ic.eta_5() * q_ap
         dcdt = self.ic.v() * q - self.ic.f() * c - self.ic.beta_2() * c - self.ic.xi_4() * c - self.ic.eta_4() * c

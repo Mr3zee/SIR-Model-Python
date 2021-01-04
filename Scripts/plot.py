@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from model import SirModel, SirInitConditions, Model, SirVital, MseirsInitConditions, MseirsModel
+from model import SirModel, SirInitConditions, Model, SirVital, SeirsInitConditions, SeirsModel
 import sliders
 
 
@@ -20,7 +20,7 @@ def sir_model(fig: Figure):
 
     build_model(
         fig=fig, plot_position=[0.10, 0.35, 0.8, 0.6],
-        init_cond=init_cond, t=50,
+        init_cond=init_cond,
         update_init_cond=sliders.update_sir(init_cond),
         model=SirModel(init_cond),
         outlines=["g-", "y--", "r-"],
@@ -44,18 +44,18 @@ def sir_vital(fig: Figure):
 
     build_model(
         fig=fig, plot_position=[0.10, 0.4, 0.8, 0.55],
-        init_cond=init_cond, t=100,
+        init_cond=init_cond,
         update_init_cond=sliders.update_sir_vital(init_cond),
         model=SirVital(init_cond),
         outlines=["g-", "y--", "r-"],
         labels=["S", "I", "R"],
-        sliders_setter=sliders.sir_sliders_vital,
+        sliders_setter=sliders.sir_vital_sliders,
         xlabel="Time, days", ylabel="Population", title="SIR Model With Vital Dynamics"
     )
 
 
-def mseiers_model(fig: Figure):
-    init_cond = MseirsInitConditions(
+def seiers_model(fig: Figure):
+    init_cond = SeirsInitConditions(
         t=50,
         total_people=1,
         initial_susceptible=0.9,
@@ -85,29 +85,28 @@ def mseiers_model(fig: Figure):
         quarantined_to_disabled_rate=0.1,  # eta2
         quarantined_recovery_rate=0.5,  # beta1
         icu_recover_rate=0.05,  # beta4
-        icu_die_rate=0.2,  # zetta5
+        icu_death_rate=0.2,  # zetta5
         icu_disable_rate=0.1,  # eta5
         carrier_recover_rate=0.1458,  # beta2
-        carrier_die_rate=0.05,  # zetta4
+        carrier_death_rate=0.05,  # zetta4
         carrier_disable_rate=0.01,  # eta4
     )
 
     build_model(
-        fig=fig, plot_position=[0.10, 0.35, 0.8, 0.6],
-        init_cond=init_cond, t=50,
-        update_init_cond=None,
-        model=MseirsModel(init_cond),
+        fig=fig, plot_position=[0.05, 0.08, 0.55, 0.85],
+        init_cond=init_cond,
+        update_init_cond=sliders.update_seirs(init_cond),
+        model=SeirsModel(init_cond),
         outlines=["g-", "b-", "y-", "y--", "r--", "r-", "c-", "k:", "k-", "k--"],
         labels=["S", "E", "I_s", "I_as", "Q", "Q'", "C", "R_wd", "D", "R_d"],
-        sliders_setter=None,
-        xlabel="Time, days", ylabel="Population", title="MSEIRS Model"
+        sliders_setter=sliders.seirs_sliders,
+        xlabel="Time, days", ylabel="Population", title="SEIRS Model"
     )
 
 
 def build_model(
         fig: Figure,
         plot_position: list,
-        t: int,
         init_cond,
         update_init_cond,
         model: Model,
@@ -131,7 +130,7 @@ def build_model(
 
     ax: Axes = fig.add_axes(plot_position)
 
-    time_axis = np.arange(0, t)
+    time_axis = np.arange(0, init_cond.t)
     plots = [ax.plot(time_axis, fun, outline, label=label)[0]
              for fun, outline, label in zip(model.solve(time_axis).T, outlines, labels)]
 
@@ -139,6 +138,7 @@ def build_model(
     ax.set_ylabel(ylabel)
     ax.legend(loc="upper right")
     ax.set_title(title)
+    ax.axis([0, init_cond.t, 0, init_cond.total_people])
 
     if sliders_setter is not None:
         sliders_setter(fig, init_cond, update)
