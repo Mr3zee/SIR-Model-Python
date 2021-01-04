@@ -20,8 +20,7 @@
 	\maketitle
 	
 	\section{Introduction}
-	Write smth about covid-19, motivation, SIR model, Kermack
-	and McKendrick etc.
+	In this article we are going to show how Kermack and McKendrick SIR models can be used for epidemic process simulation. Then we add vital dynamics to SIR model. Next we solve simple models in analytical way. Finally, we introduce sophisticated SEIRS-like model especially for COVID-19 conditions, close to real life.
 	
 	\section{Mathematical model of epidemics}
 	Let's consider a group of $N$ people and classify them into these types:
@@ -241,6 +240,84 @@
 	\begin{equation}
 		r r' = \xi(s)r + \eta(s)
 	\end{equation}
+
+	\newpage
 	
+	\section{Modeling COVID-19 pandemic}
+	In order to create lifelike COVID-19 infection model we need to introduce more parameters in our model and consider different spread cases.
+	\begin{itemize}
+		\item \textbf{$S$} -- Susceptible. Includes all individuals who are not infected but are susceptible to contract the disease.
+		\item \textbf{$E$} -- Exposed. Includes all persons who are exposed to infection, but not yet infections. Some of them might fall ill and some may not. We introduced that component due to incubation period of COVID-19 pandemic (approximated 5-6 days by WHO).
+		\item \textbf{$I_s$} -- Symptomatic infected. It includes all the individuals who were symptomatic and infectious. They have approached some health-care facility, but have not yet been quarantined. This compartment was brought into the picture considering concerning news from worst-affected counties like Italy and the U.S. of the hospitals and health-care centers getting filled up very fast during this pandemic. A significant portion of the infected individuals may not be quarantined in case of the health-care system collapses.
+		\item \textbf{$I_{as}$} -- Asymptomatic infected. It includes all those people who are affected but asymptomatic before they either recover or die or get permanently disabled. This compartment was formalized keeping after reports of various authentic studies claiming that around 30-40 percent of the infected individuals remain
+		asymptomatic.
+		\item \textbf{$Q$} -- Quarantined. Includes all persons who are currently under quarantine in healh-care facility.
+		\item \textbf{$Q'$} -- In intensive care unit. Includes the quarantined patients who had to be moved to ICU after their condition worsened.
+		
+		\item \textbf{$C$} -- Carrier. This compartment includes individuals who have left quarantine after being tested negative but actually have not fully healed. So they can possibly infetct other susceptible individuals. They eventually either fall sick again or recover from disease. We introduced it due to multiple cases of re-infection being reported from countries like South Korea, China and Japan. It is safe to assume that one of the following happened:
+		\begin{enumerate}
+			\item Medical inefficiency (inaccurate test result)
+			\item Loss of immunity after recovery and subsequent re-infection
+		\end{enumerate}
+		For the first possibility we introduced the $C$ compartment. To account for the second possibility we have kept the transition from $R$ to $S$ compartment respectively.
+		\item $R_{wd}$ -- Recovered without disability. It includes all individuals who have recovered from infection without any disability and they can no longer infect any other individual
+		\item $D$ -- Deceased. Includes all deaths during the pandemic.
+		\item $R_d$ -- Recovered with disability. In this compartment we have kept all people who have recovered from the infection, can no longer infect anyone else but have been permanently disabled post recovery.
+	\end{itemize}
+	 
+	\newpage
+
+	\section{Formualting differential equations}
+
+	Now we can define differential equations corresponding to described model above.
+
+	\begin{equation}
+		\frac{dS}{dt} = -\alpha \frac{S(I_s + I_{as} + C)}{N} + g R_{wd}
+	\end{equation}
+	Where $\alpha$ is the disease transmission rate (same as $\beta = mp$ in SIR model) and $g$ is the rate at which a fraction of recovered individuals lose their immunity.
+
+	\begin{equation}
+		\frac{dE}{dt} = \alpha \frac{S(I_s + I_{as} + C)}{N} - \mu E
+	\end{equation}
+	If average incubation period is taken to be an exponential distribution $\mu$.
+
+	\begin{equation}
+		\frac{d I_s}{dt} = r \mu E - \varepsilon I_s + fC - \zeta_1 I_s - \eta_1 I_s
+	\end{equation}
+	Where $f$ is rate at which a fraction of carriers gets re-infected. Here $0 \le r \le 1$ is a number which shows how many individuals in the exposed compartment moves to $I_s$ compartment rather than $I_{as}$ one. And $\varepsilon, \zeta_1, \eta_1$ are the rates at which infected individuals get quarantined, deceased, disabled respectively.
+
+	\begin{equation}
+		\frac{d I_{as}}{dt} = (1 - r)\mu E - \beta_3 I_{as} - \zeta_3 I_{as} - \eta_3 I_{as}
+	\end{equation}
+	Where $\beta_3, \zeta_3$ and $\eta_3$ are the recovery rate, death rate and disability rate of asymptomatic individuals respectively.
+
+	\begin{equation}
+		\frac{dQ}{dt} = \varepsilon I_s - \beta_1 Q - vQ - pQ - \zeta_2 Q - \eta_2 Q
+	\end{equation}
+	Where $v, p, \zeta_2$ and $\eta_2$ are the rates at which the quarantined individuals go to carrier state, ICU, deceased and disabled compartments respectively. $\beta_1$ is the recovery rate for quarantined people.
+	
+	\begin{equation}
+		\frac{d Q'}{dt} = pQ - \beta_4 Q' - \zeta_5 Q' - \eta_5 Q'
+	\end{equation}
+	Where $\beta_4, \zeta_5$ and $\eta_5$ are the rate with which individuals in ICU recover, die and get disabled respectively.
+
+	\begin{equation}
+		\frac{dC}{dt} = vQ - fC - \beta_2 C - \zeta_4 C - \eta_4 C
+	\end{equation}
+	Where $\beta_2, \zeta_4$ and $\eta_4$ are the rate with which carrier individuals recover, die and get disabled silently, respectively.
+
+	\begin{equation}
+		\frac{dR_{wd}}{dt} = \beta_1 Q + \beta_3 I_{as} + \beta_2 C - gR_{wd}
+	\end{equation}
+
+	\begin{equation}
+		\frac{dD}{dt} = \zeta_1 I_s + \zeta_2 Q + \zeta_3 I_{as} + \zeta_4 C + \zeta_5 Q'
+	\end{equation}
+
+	\begin{equation}
+		\frac{dR_d}{dt} = \eta_1 I_s + \eta_2 Q + \eta_3 I_{as} + \eta_4 C + \eta_5 Q'
+	\end{equation}
+
+	System of these equations can be solved using numerical methods.
 	
 \end{document}
