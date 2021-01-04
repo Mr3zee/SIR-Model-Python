@@ -54,9 +54,8 @@ def main():
 
     manager: FigureManager = plt.get_current_fig_manager()
     manager.set_window_title("SIR Model")
-    manager.resize(1440, 810)
+    manager.full_screen_toggle()
 
-    fig.set_dpi(168)
     fig.canvas.draw_idle()
     plt.show()
 
