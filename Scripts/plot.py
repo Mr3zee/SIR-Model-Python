@@ -7,7 +7,6 @@ import sliders
 
 
 def sir_model(fig: Figure):
-
     init_cond = SirInitConditions(
         t=50,
         total_people=10000,
@@ -31,7 +30,6 @@ def sir_model(fig: Figure):
 
 
 def sir_vital(fig: Figure):
-
     init_cond = SirInitConditions(
         t=70,
         total_people=10000,
@@ -57,17 +55,17 @@ def sir_vital(fig: Figure):
 def seiers_model(fig: Figure):
     init_cond = SeirsInitConditions(
         t=50,
-        total_people=1,
-        initial_susceptible=0.9,
-        initial_exposed=0,
-        initial_symptomatic_infected=0.1,
-        initial_asymptomatic_infected=0,
-        initial_quarantined=0,
-        initial_icu=0,
-        initial_carrier=0,
-        initial_recovered_without_disability=0,
-        initial_deceased=0,
-        initial_recovered_with_disability=0,
+        total_people=85000 + 10000 + 20000 + 1000 + 1200 + 3000 + 1000 + 2000 + 1500,
+        initial_susceptible=85000,
+        initial_exposed=80000,
+        initial_symptomatic_infected=10000,
+        initial_asymptomatic_infected=20000,
+        initial_quarantined=1000,
+        initial_icu=1200,
+        initial_carrier=3000,
+        initial_recovered_without_disability=1000,
+        initial_deceased=2000,
+        initial_recovered_with_disability=1500,
         disease_transmission_rate=0.42,  # alpha
         recovered_lose_immunity_rate=0.0001,  # g
         average_incubation_period=0.5,  # mu

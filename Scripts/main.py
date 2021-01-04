@@ -56,6 +56,7 @@ def main():
     manager.set_window_title("SIR Model")
     manager.resize(1440, 810)
 
+    fig.set_dpi(168)
     fig.canvas.draw_idle()
     plt.show()
 
