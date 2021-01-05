@@ -48,8 +48,8 @@ def make_model(fig: Figure):
 def main():
     fig: Figure = plt.figure()
 
-    if make_model(fig) is None:
-        print("Invalid model type\nCurrently supported types: sir-model, sir-vital")
+    if make_model(fig) == -1:
+        print("Invalid model type\nCurrently supported types: sir-model, sir-vital, seirs-model")
         return
 
     manager: FigureManager = plt.get_current_fig_manager()
