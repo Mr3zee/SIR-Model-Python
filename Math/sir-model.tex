@@ -327,7 +327,6 @@
 	\newpage
 
 	\subsection{Parameters selection}
-	We decided to use Germany as an example for modeling epidemics. All presented data below were collected from open sources.
 
 	\begin{longtable}[c]{| c | c |}
 		\caption{Initial condtions}\\
@@ -350,37 +349,56 @@
 		
 	\end{longtable}
 
-	\begin{longtable}[c]{| c | c |}
+	\begin{longtable}[c]{| c | c | c | c |}
 		\caption{Other parameters}\\
 
 		\hline
-		Parameter & Value\\
+		Parameter & Value & Parameter & Value\\
 		\hline
-		$\alpha$ & 0.8 \\
-		$g$ & 0.0001 \\
-		$\mu$ & 7 \\
-		$f$ & 0.05\\
-		$r$ & 0.14 \\
-		$\varepsilon$ & 0.2 \\
-		$\zeta_1$ & 0.021 \\
-		$\eta_1$ & 0.1977 \\
-		$\beta_3$ & 0.1428 \\
-		$\zeta_3$ & 0.003 \\
-		$\eta_3$ & 0.057 \\
-		$v$ & 0.05 \\
-		$p$ & 0.25 \\
-		$\zeta_2$ & 0.125 \\
-		$\eta_2$ & 0.6 \\
-		$\beta_1$ & 0.1 \\
-		$\beta_4$ & 0.05 \\
-		$\zeta_5$ & 0.5 \\
-		$\eta_5$ & 0.45 \\
-		$\beta_2$ & 0.25 \\
-		$\zeta_4$ & 0.05 \\
-		$\eta_4$ & 0.01 \\
+		$\alpha$ & 0.8 & $v$ & 0.05 \\
+		$g$ & 0.0001 & $p$ & 0.25\\
+		$\mu$ & 7 & $\zeta_2$ & 0.125\\
+		$f$ & 0.05 &$\eta_2$ & 0.6 \\
+		$r$ & 0.14 & $\beta_1$ & 0.1\\
+		$\varepsilon$ & 0.2 & $\beta_4$ & 0.05\\
+		$\zeta_1$ & 0.021 & $\zeta_5$ & 0.5 \\
+		$\eta_1$ & 0.1977 & $\eta_5$ & 0.45\\
+		$\beta_3$ & 0.1428 & $\beta_2$ & 0.25\\
+		$\zeta_3$ & 0.003 & $\zeta_4$ & 0.05\\
+		$\eta_3$ & 0.057 & $\eta_4$ & 0.01\\
 		\hline
 		
 	\end{longtable}
+
+	We decided to use Germany as an example for modeling epidemics.These values were actual on April 5, 2020. And we take into account further statistics to fine tune the parameters to real life.
+
+	\subsection{Obtained result}
+	placeholder
+
+	\subsection{Comparing with real life situation}
+	placeholder
+
+	\section{References and data sources}
+	\begin{itemize}
+		\item Exact analytical solutions of the Susceptible-Infected-Recovered (SIR) epidemic
+		model and of the SIR model with equal death and birth rates. Tiberiu Harko, Francisco S. N. Lobo, M. K. Mak.
+
+		\item A Mathematical Model of Epidemics—A Tutorial
+		for Students. Yutaka Okabe and Akira Shudo. Department of Physics, Tokyo Metropolitan University, Hachioji, Tokyo 192-0397, Japan.
+
+		\item Modelling and simulation of COVID-19 propagation in a large population with specific reference to India.
+		Ashish Menon, Nithin K Rajendran, Anish Chandrachud, Girish Setlur. Department of Physics, Indian Institute of Technology Guwahati.
+
+		\item Statistics of the COVID-19 pandemic in Germany: \url{https://en.wikipedia.org/wiki/Statistics_of_the_COVID-19_pandemic_in_Germany}
 	
+		\item Close to 17 percent of patients recovered from COVID-19 could still carry virus: \url{https://www.sciencedaily.com/releases/2020/10/201028134029.htm}
+		
+		\item Flattening the disability curve: Rehabilitation and recovery after COVID-19 infection: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7211743/}
+		
+		\item Complete COVID-19 dataset maintained by Our World in Data: \url{https://github.com/owid/covid-19-data/tree/master/public/data/}
+		
+		
+	\end{itemize}
+
 	
 \end{document}
