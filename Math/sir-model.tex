@@ -8,6 +8,7 @@
 \usepackage{mathtools}
 \usepackage{cases}
 \usepackage{hyperref}
+\usepackage{longtable}
 
 \title{SIR models for the spread of COVID-19}
 \date{\today}
@@ -244,6 +245,9 @@
 	\newpage
 	
 	\section{Modeling COVID-19 pandemic}
+
+	\subsection{Definitions}
+
 	In order to create lifelike COVID-19 infection model we need to introduce more parameters in our model and consider different spread cases.
 	\begin{itemize}
 		\item \textbf{$S$} -- Susceptible. Includes all individuals who are not infected but are susceptible to contract the disease.
@@ -267,7 +271,7 @@
 	 
 	\newpage
 
-	\section{Formualting differential equations}
+	\subsection{Formualting differential equations}
 
 	Now we can define differential equations corresponding to described model above.
 
@@ -319,5 +323,20 @@
 	\end{equation}
 
 	System of these equations can be solved using numerical methods.
+
+	\newpage
+
+	\subsection{Parameters selection}
+	We have chosen Germany as an example for modeling epidemics.
+
+	\begin{longtable}[c]{| c | c | c | c |}
+		\caption{Chosen values}\\
+
+		\hline
+		Parameter & Value & Parameter & Value\\
+		\hline
+		
+	\end{longtable}
+	
 	
 \end{document}
