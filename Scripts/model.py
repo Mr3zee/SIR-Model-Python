@@ -24,6 +24,7 @@ class SirInitConditions(InitCond):
     ):
         # validate it
         self.t = t
+        self.y = total_people
         self.total_people = total_people
         self.initial_susceptible_people = total_people - initial_infected_people
         self.initial_infected_people = initial_infected_people
@@ -118,7 +119,7 @@ class SeirsInitConditions(InitCond):
             self,
             t,
             total_people,
-            initial_susceptible,
+            initial_susceptible_people,
             initial_exposed,
             initial_symptomatic_infected,
             initial_asymptomatic_infected,
@@ -152,7 +153,8 @@ class SeirsInitConditions(InitCond):
             carrier_disable_rate
     ):
         self.t = t
-        self.initial_susceptible = initial_susceptible
+        self.y = total_people
+        self.initial_susceptible_people = initial_susceptible_people
         self.total_people = total_people
         self.disease_transmission_rate = disease_transmission_rate
         self.initial_recovered_with_disability = initial_recovered_with_disability
@@ -190,7 +192,7 @@ class SeirsInitConditions(InitCond):
         return self.total_people
 
     def n1(self):
-        return self.initial_susceptible
+        return self.initial_susceptible_people
 
     def n2(self):
         return self.initial_exposed
