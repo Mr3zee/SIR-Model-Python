@@ -40,7 +40,7 @@ contacts_sld, update_contacts = slider_fabric('contacts_per_day', 'Contacts', 1.
 prob_sld, update_prob = slider_fabric('prob_of_infection_for_contact', 'Infection prob.', 0.0, 1.0, 0.001)
 recover_sld, update_recover = slider_fabric('recover_rate', 'Recover rate', 0.0, 0.5, 0.001)
 birth_death_sld, update_birth_death = slider_fabric('birth_death_rate', 'Birth/Death Rate', 0.0, 0.2, 0.001)
-time_sld, update_time = slider_fabric('t', 'Time', 10.0, 500.0, 1.0)
+time_sld, update_time = slider_fabric('t', 'Days', 10.0, 1500.0, 1.0)
 
 
 def y(max_y, step):
@@ -49,7 +49,7 @@ def y(max_y, step):
 
 y_sir_sld, update_y_sir = y(main.sir_total, 100)
 y_sir_vital_sld, update_y_sir_vital = y(main.sir_vital_total, 100)
-y_seirs_sld, update_y_seirs = y(main.seirs_total, 1000)
+y_seirs_sld, update_y_seirs = y(main.seirs_total, 100.0)
 
 
 ###############################################################################################
@@ -60,9 +60,9 @@ y_seirs_sld, update_y_seirs = y(main.seirs_total, 1000)
 def init_infected_symp_sld(fig: Figure, init_cond, update, left, bottom, width, height):
     main.slider_initial_symptomatic_infected = Slider(fig.add_axes(
         [left, bottom, width, height]
-    ), "Initial Infected Symp. (%)", 0.0, 10.0,
+    ), "Initial Infected Symp. (%)", 0.0, 0.001,
         valinit=init_cond.initial_symptomatic_infected / init_cond.total_people * 100,
-        valstep=0.01,
+        valstep=0.0000001,
     )
     main.slider_initial_symptomatic_infected.on_changed(update)
 
@@ -75,28 +75,28 @@ def update_init_infected_symp(cond):
     cond.initial_susceptible_people = new_s0
 
 
-alpha_sld, update_alpha = slider_fabric('disease_transmission_rate', 'Dis. trans.', 0.1, 1.0, 0.001)
+alpha_sld, update_alpha = slider_fabric('disease_transmission_rate', 'Dis. trans.', 0.0, 1.0, 0.001)
 g_sld, update_g = slider_fabric('recovered_lose_immunity_rate', 'Lose Immunity', 0.0, 0.01, 0.0001)
 mu_sld, update_mu = slider_fabric('average_incubation_period', 'Incub. Period', 0.0, 14.0, 0.1)
-f_sld, update_f = slider_fabric('reinfected_carriers_rate', 'Reinf. Carriers', 0.0, 2.0, 0.001)
-r_sld, update_r = slider_fabric('exposed_to_symptomatic_infected_rate', 'Exposed', 0.0, 2.0, 0.001)
-epsilon_sld, update_epsilon = slider_fabric('infected_to_quarantined_rate', 'Inf. to Quar.', 0.0, 1.0, 0.001)
-zetta1_sld, update_zetta1 = slider_fabric('infected_to_deceased_rate', 'Inf. to Dec.', 0.0, 1.0, 0.001)
-eta1_sld, update_eta1 = slider_fabric('infected_to_disabled_rate', 'Inf. to Dis.', 0.0, 1.0, 0.001)
+f_sld, update_f = slider_fabric('reinfected_carriers_rate', 'Reinf. Carriers', 0.0, 5.0, 0.001)
+r_sld, update_r = slider_fabric('exposed_to_symptomatic_infected_rate', 'Exposed to Symp.', 0.0, 1.0, 0.001)
+epsilon_sld, update_epsilon = slider_fabric('infected_to_quarantined_rate', 'Inf. to Quar.', 0.0, 5.0, 0.001)
+zetta1_sld, update_zetta1 = slider_fabric('infected_to_deceased_rate', 'Inf. to Dec.', 0.0, 5.0, 0.001)
+eta1_sld, update_eta1 = slider_fabric('infected_to_disabled_rate', 'Inf. to Dis.', 0.0, 5.0, 0.001)
 beta3_sld, update_beta3 = slider_fabric('asymptomatic_recovery_rate', 'Asymp. Recovery', 0.0, 1.0, 0.0001)
-zetta3_sld, update_zetta3 = slider_fabric('asymptomatic_death_rate', 'Asymp. Death', 0.0, 1.0, 0.001)
-eta3_sld, update_eta3 = slider_fabric('asymptomatic_disability_rate', 'Asymp. Disability', 0.0, 0.5, 0.001)
-v_sld, update_v = slider_fabric('quarantined_to_carrier_rate', 'Quar. to Carrier', 0.0, 1.0, 0.001)
-ro_sld, update_ro = slider_fabric('quarantined_to_icu_rate', 'Quar. to ICU', 0.0, 1.0, 0.001)
-zetta2_sld, update_zetta2 = slider_fabric('quarantined_to_deceased_rate', 'Quar. to Dec.', 0.0, 1.0, 0.001)
-eta2_sld, update_eta2 = slider_fabric('quarantined_to_disabled_rate', 'Quar. to Dis.', 0.0, 1.0, 0.001)
-beta1_sld, update_beta1 = slider_fabric('quarantined_recovery_rate', 'Quar. Recovery', 0.0, 1.0, 0.001)
-beta4_sld, update_beta4 = slider_fabric('icu_recover_rate', 'ICU Recovery', 0.0, 1.0, 0.001)
-zetta5_sld, update_zetta5 = slider_fabric('icu_death_rate', 'ICU Death', 0.0, 1.0, 0.001)
-eta5_sld, update_eta5 = slider_fabric('icu_disable_rate', 'ICU Dis.', 0.0, 1.0, 0.001)
-beta2_sld, update_beta2 = slider_fabric('carrier_recover_rate', 'Car. Recover', 0.0, 1.0, 0.0001)
-zetta4_sld, update_zetta4 = slider_fabric('carrier_death_rate', 'Car. Death', 0.0, 1.0, 0.001)
-eta4_sld, update_eta4 = slider_fabric('carrier_disable_rate', 'Car. Dis.', 0.0, 1.0, 0.001)
+zetta3_sld, update_zetta3 = slider_fabric('asymptomatic_death_rate', 'Asymp. Death', 0.0, 5.0, 0.001)
+eta3_sld, update_eta3 = slider_fabric('asymptomatic_disability_rate', 'Asymp. Disability', 0.0, 5.0, 0.001)
+v_sld, update_v = slider_fabric('quarantined_to_carrier_rate', 'Quar. to Carrier', 0.0, 5.0, 0.001)
+ro_sld, update_ro = slider_fabric('quarantined_to_icu_rate', 'Quar. to ICU', 0.0, 5.0, 0.001)
+zetta2_sld, update_zetta2 = slider_fabric('quarantined_to_deceased_rate', 'Quar. to Dec.', 0.0, 5.0, 0.001)
+eta2_sld, update_eta2 = slider_fabric('quarantined_to_disabled_rate', 'Quar. to Dis.', 0.0, 5.0, 0.001)
+beta1_sld, update_beta1 = slider_fabric('quarantined_recovery_rate', 'Quar. Recovery', 0.0, 5.0, 0.001)
+beta4_sld, update_beta4 = slider_fabric('icu_recover_rate', 'ICU Recovery', 0.0, 5.0, 0.001)
+zetta5_sld, update_zetta5 = slider_fabric('icu_death_rate', 'ICU Death', 0.0, 5.0, 0.001)
+eta5_sld, update_eta5 = slider_fabric('icu_disable_rate', 'ICU Dis.', 0.0, 5.0, 0.001)
+beta2_sld, update_beta2 = slider_fabric('carrier_recover_rate', 'Car. Recover', 0.0, 5.0, 0.0001)
+zetta4_sld, update_zetta4 = slider_fabric('carrier_death_rate', 'Car. Death', 0.0, 5.0, 0.001)
+eta4_sld, update_eta4 = slider_fabric('carrier_disable_rate', 'Car. Dis.', 0.0, 5.0, 0.001)
 
 
 ###############################################################################################

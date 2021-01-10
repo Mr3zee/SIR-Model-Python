@@ -309,8 +309,7 @@ class SeirsModel(Model, ABC):
         dsdt = -self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) + self.ic.g() * r_wd
         dedt = self.ic.alpha() / self.ic.n() * s * (i_s + i_as + c) - self.ic.mu() * e
         di_sdt = self.ic.r() * self.ic.mu() * e - self.ic.eps() * i_s + self.ic.f() * c - self.ic.xi_1() * i_s - self.ic.eta_1() * i_s
-        di_asdt = (
-                              1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
+        di_asdt = (1 - self.ic.r()) * self.ic.mu() * e - self.ic.beta_3() * i_as - self.ic.xi_3() * i_as - self.ic.eta_3() * i_as
         dqdt = self.ic.eps() * i_s - self.ic.beta_1() * q - self.ic.v() * q - self.ic.ro() * q - self.ic.xi_2() * q - self.ic.eta_2() * q
         dq_apdt = self.ic.ro() * q - self.ic.beta_4() * q_ap - self.ic.xi_5() * q_ap - self.ic.eta_5() * q_ap
         dcdt = self.ic.v() * q - self.ic.f() * c - self.ic.beta_2() * c - self.ic.xi_4() * c - self.ic.eta_4() * c
