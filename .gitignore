@@ -2,3 +2,4 @@
 *.gz
 **/.idea
 **/out
+**/__pycache__
