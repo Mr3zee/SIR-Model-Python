@@ -55,7 +55,7 @@ def sir_vital(fig: Figure):
 
 def seirs_model(fig: Figure):
     total = main.seirs_total
-    cases = 100
+    cases = 10
     init_cond = SeirsInitConditions(
         t=800,
         total_people=total,
