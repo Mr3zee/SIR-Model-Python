@@ -71,7 +71,7 @@ def seirs_model(fig: Figure):
         initial_recovered_with_disability=0,
         disease_transmission_rate=0.42,  # alpha
         recovered_lose_immunity_rate=0.0001,  # g
-        average_incubation_period=0.5,  # mu
+        average_incubation_period=7,  # mu
         reinfected_carriers_rate=0.2,  # f
         exposed_to_symptomatic_infected_rate=0.3,  # r
         infected_to_quarantined_rate=0.5,  # epsilon
