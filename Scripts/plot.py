@@ -4,12 +4,13 @@ from matplotlib.figure import Figure
 
 from model import SirModel, SirInitConditions, Model, SirVital, SeirsInitConditions, SeirsModel
 import sliders
+import main
 
 
 def sir_model(fig: Figure):
     init_cond = SirInitConditions(
         t=50,
-        total_people=10000,
+        total_people=main.sir_total,
         initial_infected_people=10,
         contacts_per_day=3,
         prob_of_infection_for_contact=0.5,
@@ -32,7 +33,7 @@ def sir_model(fig: Figure):
 def sir_vital(fig: Figure):
     init_cond = SirInitConditions(
         t=70,
-        total_people=10000,
+        total_people=main.sir_vital_total,
         initial_infected_people=10,
         contacts_per_day=5,
         prob_of_infection_for_contact=0.1,
@@ -52,27 +53,29 @@ def sir_vital(fig: Figure):
     )
 
 
-def seiers_model(fig: Figure):
+def seirs_model(fig: Figure):
+    total = main.seirs_total
+    cases = 10
     init_cond = SeirsInitConditions(
-        t=50,
-        total_people=85000 + 10000 + 20000 + 1000 + 1200 + 3000 + 1000 + 2000 + 1500,
-        initial_susceptible=85000,
-        initial_exposed=80000,
-        initial_symptomatic_infected=10000,
-        initial_asymptomatic_infected=20000,
-        initial_quarantined=1000,
-        initial_icu=1200,
-        initial_carrier=3000,
-        initial_recovered_without_disability=1000,
-        initial_deceased=2000,
-        initial_recovered_with_disability=1500,
+        t=800,
+        total_people=total,
+        initial_susceptible_people=total - cases,
+        initial_exposed=0,
+        initial_symptomatic_infected=cases,
+        initial_asymptomatic_infected=0,
+        initial_quarantined=0,
+        initial_icu=0,
+        initial_carrier=0,
+        initial_recovered_without_disability=0,
+        initial_deceased=0,
+        initial_recovered_with_disability=0,
         disease_transmission_rate=0.42,  # alpha
         recovered_lose_immunity_rate=0.0001,  # g
-        average_incubation_period=0.5,  # mu
+        average_incubation_period=7,  # mu
         reinfected_carriers_rate=0.2,  # f
         exposed_to_symptomatic_infected_rate=0.3,  # r
         infected_to_quarantined_rate=0.5,  # epsilon
-        infected_to_deceased_rate=0.25,  # zetta1
+        infected_to_deceased_rate=0.025,  # zetta1
         infected_to_disabled_rate=0.1,  # eta1
         asymptomatic_recovery_rate=0.1458,  # beta3
         asymptomatic_death_rate=0.1,  # zetta3
@@ -123,7 +126,7 @@ def build_model(
             plot.set_ydata(data)
             plot.set_xdata(new_time_axis)
 
-        ax.axis([0, init_cond.t, 0, init_cond.total_people])
+        ax.axis([0, init_cond.t, 0, init_cond.y])
         fig.canvas.draw_idle()
 
     ax: Axes = fig.add_axes(plot_position)

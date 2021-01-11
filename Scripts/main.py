@@ -1,8 +1,6 @@
 import sys
 
-from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-from matplotlib.widgets import Slider
 
 import plot
 
@@ -27,7 +25,13 @@ slider_birth_death_rate = None
 slider_t = None
 
 # SEIRS SLIDERS
-slider_disease_transmission_rate = None
+slider_initial_symptomatic_infected = None
+
+
+# TOTAL PEOPLE
+sir_total = 10000
+sir_vital_total = 10000
+seirs_total = 83783945
 
 
 def make_model(fig: Figure):
@@ -39,7 +43,7 @@ def make_model(fig: Figure):
     elif args[1] == "sir-vital":
         plot.sir_vital(fig)
     elif args[1] == "seirs-model":
-        plot.seiers_model(fig)
+        plot.seirs_model(fig)
     else:
         return -1
     return 0
@@ -48,8 +52,8 @@ def make_model(fig: Figure):
 def main():
     fig: Figure = plt.figure()
 
-    if make_model(fig) is None:
-        print("Invalid model type\nCurrently supported types: sir-model, sir-vital")
+    if make_model(fig) == -1:
+        print("Invalid model type\nCurrently supported types: sir-model, sir-vital, seirs-model")
         return
 
     manager: FigureManager = plt.get_current_fig_manager()
