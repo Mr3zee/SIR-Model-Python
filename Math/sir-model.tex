@@ -336,9 +336,9 @@
 		Initial condition & Value & Rate & Value & Rate & Value\\
 		\hline
 		$N$ & 83783945 & $\alpha$ & 0.42 & $v$ & 0.05 \\
-		$S$ & 83783845 & $g$ & 0.0001 & $p$ & 0.01\\
+		$S$ & 83783935 & $g$ & 0.0001 & $p$ & 0.01\\
 		$E$ & 0 & $\mu$ & 7 & $\zeta_2$ & 0.2\\
-		$I_s$ & 100 & $f$ & 0.2 & $\eta_2$ & 0.1 \\
+		$I_s$ & 10 & $f$ & 0.2 & $\eta_2$ & 0.1 \\
 		$I_{as}$ & 0 & $r$ & 0.3 & $\beta_1$ & 0.5\\
 		$Q$ & 0 &$\varepsilon$ & 0.5 & $\beta_4$ & 0.05\\
 		$Q'$ & 0 &$\zeta_1$ & 0.025 & $\zeta_5$ & 0.2 \\
@@ -368,6 +368,16 @@
 		\caption{SEIRS model with fixed disease transmission rate $\alpha = 0.42$. Zoomed to outbreak.}
 	\end{figure}
 
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=15cm]{germany_stats.png}
+		\caption{Official Germany COVID-19 Statistics}
+	\end{figure}
+
+	Comparing official data and our model, we can see, that the start of the outbreak is pretty much the same, but due to fixed disease transmission rate in the model, which indicates almost complete disregard of security measures, we get more dead and  infected people, whereas the real disease spread rate begins to slow down because of the lockdown and other measures such as improved tests. 
+	
+	\
+
 	Let's see how conditions getting worse if people simply do not maintain social distance and neglet personal protective equipment like masks. Potentially number of contacts and probability of getiing infection increases as well as our $\alpha$ rate.
 
 	\begin{figure}[h!]
@@ -386,6 +396,10 @@
 
 	We observe that expected outbreak occured earlier. Number of asymptomatic infected people reaches 5 millon, comparing with about 1 millon before. Meanwhile, the amount of deaths has almost doubled. Rapidly decreasing susceptible people means the high rate of infection. Thus, the situation has greately worsened. It means a heavy burden on medical institutions and will affect every aspect of our life.
 
+	\section{Conclusion}
+
+	We have created two models, which can help students understand basics of the disease spread process, and one more accurate, which can give more valuable information about epidemics, specifically about consequences of "covid-dissidence" and ignorance of the safety measurements.
+
 	\section{References and data sources}
 
 	\begin{itemize}
@@ -399,11 +413,7 @@
 		Ashish Menon, Nithin K Rajendran, Anish Chandrachud, Girish Setlur. Department of Physics, Indian Institute of Technology Guwahati.
 
 		\item Statistics of the COVID-19 pandemic in Germany: \url{https://en.wikipedia.org/wiki/Statistics_of_the_COVID-19_pandemic_in_Germany}
-	
-		\item Close to 17 percent of patients recovered from COVID-19 could still carry virus: \url{https://www.sciencedaily.com/releases/2020/10/201028134029.htm}
-		
-		\item Flattening the disability curve: Rehabilitation and recovery after COVID-19 infection: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7211743/}
-		
+
 		\item Complete COVID-19 dataset maintained by Our World in Data: \url{https://github.com/owid/covid-19-data/tree/master/public/data/}
 	\end{itemize}
 \end{document}
