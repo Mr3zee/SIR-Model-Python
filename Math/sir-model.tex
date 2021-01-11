@@ -1,7 +1,7 @@
 \documentclass[12pt, a4paper]{article}
 
 \usepackage{geometry}
-\geometry{verbose,a4paper,tmargin=2cm,bmargin=2cm,lmargin=2.5cm,rmargin=1.5cm}
+\geometry{verbose,a4paper,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
  
 \usepackage[english]{babel}
 \usepackage{amsmath}
@@ -330,51 +330,27 @@
 
 	\subsection{Parameters and initial conditions selection}
 
-	\begin{longtable}[c]{| c | c |}
-		\caption{Initial condtions}\\
+	\begin{longtable}[c]{| c | c | c | c | c | c |}
+		\caption{Initial condtions and rates}\\
+		\hline
+		Initial condition & Value & Rate & Value & Rate & Value\\
+		\hline
+		$N$ & 83783945 & $\alpha$ & 0.42 & $v$ & 0.05 \\
+		$S$ & 83783845 & $g$ & 0.0001 & $p$ & 0.01\\
+		$E$ & 0 & $\mu$ & 7 & $\zeta_2$ & 0.2\\
+		$I_s$ & 100 & $f$ & 0.2 & $\eta_2$ & 0.1 \\
+		$I_{as}$ & 0 & $r$ & 0.3 & $\beta_1$ & 0.5\\
+		$Q$ & 0 &$\varepsilon$ & 0.5 & $\beta_4$ & 0.05\\
+		$Q'$ & 0 &$\zeta_1$ & 0.025 & $\zeta_5$ & 0.2 \\
+		$C$ & 0 &$\eta_1$ & 0.1 & $\eta_5$ & 0.1\\
+		$R_{wd}$ & 0 & $\beta_3$ & 0.1458 & $\beta_2$ & 0.1458\\
+		$D$ & 0 & $\zeta_3$ & 0.1 & $\zeta_4$ & 0.05\\
+		$R_d$ & 0 & $\eta_3$ & 0.05 & $\eta_4$ & 0.01\\
+		\hline
 
-		\hline
-		Parameter & Value\\
-		\hline
-		$N$ & 83783945\\
-		$S$ & 83783845\\
-		$E$ & 0\\
-		$I_s$ & 100\\
-		$I_{as}$ & 0\\
-		$Q$ & 0\\
-		$Q'$ & 0\\
-		$C$ & 0\\
-		$R_{wd}$ & 0\\
-		$D$ & 0\\
-		$R_d$ & 0\\
-		\hline
-		
-	\end{longtable}
-
-	\begin{longtable}[c]{| c | c | c | c |}
-		\caption{Other parameters}\\
-
-		\hline
-		Parameter & Value & Parameter & Value\\
-		\hline
-		$\alpha$ & 0.42 & $v$ & 0.05 \\
-		$g$ & 0.0001 & $p$ & 0.01\\
-		$\mu$ & 7 & $\zeta_2$ & 0.2\\
-		$f$ & 0.2 & $\eta_2$ & 0.1 \\
-		$r$ & 0.3 & $\beta_1$ & 0.5\\
-		$\varepsilon$ & 0.5 & $\beta_4$ & 0.05\\
-		$\zeta_1$ & 0.025 & $\zeta_5$ & 0.2 \\
-		$\eta_1$ & 0.1 & $\eta_5$ & 0.1\\
-		$\beta_3$ & 0.1458 & $\beta_2$ & 0.1458\\
-		$\zeta_3$ & 0.1 & $\zeta_4$ & 0.05\\
-		$\eta_3$ & 0.05 & $\eta_4$ & 0.01\\
-		\hline
-		
 	\end{longtable}
 
 	We decided to use early data from Germany for modeling epidemics. Data sources links provided at the end of article. Primarily, we relied on dataset by \textit{Our World in Data}. Rates were calculated using correlation with recent observations, research news and publications. These values were actual on February 2, 2020. We take into account further statistics to fine tune the parameters closer to real life.
-
-	\newpage
 
 	\subsection{Obtained results}
 
@@ -383,6 +359,8 @@
 		\includegraphics[width=12cm]{seirs.png}
 		\caption{SEIRS model with fixed disease transmission rate $\alpha = 0.42$.}
 	\end{figure}
+
+	\newpage
 
 	\begin{figure}[h!]
 		\centering
@@ -398,6 +376,8 @@
 		\caption{SEIRS model with increased $\alpha = 0.55$.}
 	\end{figure}
 
+	\newpage
+
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=12cm]{seirs_bigalpha_2.png}
@@ -406,9 +386,8 @@
 
 	We observe that expected outbreak occured earlier. Number of asymptomatic infected people reaches 5 millon, comparing with about 1 millon before. Meanwhile, the amount of deaths has almost doubled. Rapidly decreasing susceptible people means the high rate of infection. Thus, the situation has greately worsened. It means a heavy burden on medical institutions and will affect every aspect of our life.
 
-	\newpage
-
 	\section{References and data sources}
+
 	\begin{itemize}
 		\item Exact analytical solutions of the Susceptible-Infected-Recovered (SIR) epidemic
 		model and of the SIR model with equal death and birth rates. Tiberiu Harko, Francisco S. N. Lobo, M. K. Mak.
@@ -426,9 +405,5 @@
 		\item Flattening the disability curve: Rehabilitation and recovery after COVID-19 infection: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7211743/}
 		
 		\item Complete COVID-19 dataset maintained by Our World in Data: \url{https://github.com/owid/covid-19-data/tree/master/public/data/}
-		
-		
 	\end{itemize}
-
-	
 \end{document}
