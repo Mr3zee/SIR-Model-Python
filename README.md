@@ -6,17 +6,17 @@ This repository contains three *susceptible-infected-recovered* models solved us
 
 ### Screenshots
 
-![image-20210330201348677](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Media/readme1.png)
-
 ###### pic.1 Base SIR Model
 
-![image-20210330201427604](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Media/readme2.png)
+![image-20210330201348677](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Media/readme1.png)
 
 ###### pic.2 SIR Model with Vital Dynamics
 
-![image-20210330201412657](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Media/readme3.png)
+![image-20210330201427604](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Media/readme2.png)
 
 ###### pic.3 SEIRS Model 
+
+![image-20210330201412657](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Media/readme3.png)
 
 ### Run
 
@@ -29,3 +29,7 @@ python setup.py [model-name]
 in your terminal from the project folder
 
 Current models available: `sir-model`, `sir-vital`, `seirs-model`
+
+### See also
+
+- [Docs](https://github.com/Mr3zee/SIR-Model-Python/blob/main/Math/sir-model.pdf)
