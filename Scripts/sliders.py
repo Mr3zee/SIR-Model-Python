@@ -1,7 +1,8 @@
 from matplotlib.figure import Figure
 from matplotlib.widgets import Slider
 
-import main
+import Scripts.setup as setup
+import Scripts.consts as consts
 
 
 def slider_fabric(name, label, lower, upper, step):
@@ -10,26 +11,26 @@ def slider_fabric(name, label, lower, upper, step):
             [left, bottom, width, height]
         ), label, lower, upper, valinit=init_cond.get(name), valstep=step)
         slider.on_changed(update)
-        main.add_slider(name, slider)
+        setup.add_slider(name, slider)
 
     def inner_update(cond):
-        cond.set(name, main.get_val(name))
+        cond.set(name, setup.get_val(name))
 
     return inner, inner_update
 
 
 def initial_infected_sld(fig: Figure, init_cond, update, left, bottom, width, height):
-    main.slider_initial_infected = Slider(fig.add_axes(
+    setup.slider_initial_infected = Slider(fig.add_axes(
         [left, bottom, width, height]
     ), "Initial Infected (%)", 0.0, 10.0,
         valinit=init_cond.initial_infected_people / init_cond.total_people * 100,
         valstep=0.01,
     )
-    main.slider_initial_infected.on_changed(update)
+    setup.slider_initial_infected.on_changed(update)
 
 
 def update_initial_infected(cond):
-    infected_percent = main.slider_initial_infected.val
+    infected_percent = setup.slider_initial_infected.val
     new_i0 = cond.total_people * infected_percent / 100
     new_s0 = cond.total_people - new_i0
     cond.initial_infected_people = new_i0
@@ -47,9 +48,9 @@ def y(max_y, step):
     return slider_fabric('y', 'y max', 0, max_y, step)
 
 
-y_sir_sld, update_y_sir = y(main.sir_total, 100)
-y_sir_vital_sld, update_y_sir_vital = y(main.sir_vital_total, 100)
-y_seirs_sld, update_y_seirs = y(main.seirs_total, 100.0)
+y_sir_sld, update_y_sir = y(consts.sir_total, 100)
+y_sir_vital_sld, update_y_sir_vital = y(consts.sir_vital_total, 100)
+y_seirs_sld, update_y_seirs = y(consts.seirs_total, 100.0)
 
 
 ###############################################################################################
@@ -58,17 +59,17 @@ y_seirs_sld, update_y_seirs = y(main.seirs_total, 100.0)
 
 
 def init_infected_symp_sld(fig: Figure, init_cond, update, left, bottom, width, height):
-    main.slider_initial_symptomatic_infected = Slider(fig.add_axes(
+    setup.slider_initial_symptomatic_infected = Slider(fig.add_axes(
         [left, bottom, width, height]
     ), "Initial Infected Symp. (%)", 0.0, 0.001,
         valinit=init_cond.initial_symptomatic_infected / init_cond.total_people * 100,
         valstep=0.0000001,
     )
-    main.slider_initial_symptomatic_infected.on_changed(update)
+    setup.slider_initial_symptomatic_infected.on_changed(update)
 
 
 def update_init_infected_symp(cond):
-    infected_percent = main.slider_initial_symptomatic_infected.val
+    infected_percent = setup.slider_initial_symptomatic_infected.val
     new_i0 = cond.total_people * infected_percent / 100
     new_s0 = cond.total_people - new_i0
     cond.initial_symptomatic_infected = new_i0
