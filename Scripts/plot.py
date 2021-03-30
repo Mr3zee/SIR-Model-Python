@@ -2,15 +2,16 @@ import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from model import SirModel, SirInitConditions, Model, SirVital, SeirsInitConditions, SeirsModel
-import sliders
-import main
+import Scripts.consts as consts
+import Scripts.setup as setup
+import Scripts.sliders as sliders
+from Scripts.model import SirModel, SirInitConditions, Model, SirVital, SeirsInitConditions, SeirsModel
 
 
 def sir_model(fig: Figure):
     init_cond = SirInitConditions(
         t=50,
-        total_people=main.sir_total,
+        total_people=consts.sir_total,
         initial_infected_people=10,
         contacts_per_day=3,
         prob_of_infection_for_contact=0.5,
@@ -33,7 +34,7 @@ def sir_model(fig: Figure):
 def sir_vital(fig: Figure):
     init_cond = SirInitConditions(
         t=70,
-        total_people=main.sir_vital_total,
+        total_people=consts.sir_vital_total,
         initial_infected_people=10,
         contacts_per_day=5,
         prob_of_infection_for_contact=0.1,
@@ -54,7 +55,7 @@ def sir_vital(fig: Figure):
 
 
 def seirs_model(fig: Figure):
-    total = main.seirs_total
+    total = consts.seirs_total
     cases = 10
     init_cond = SeirsInitConditions(
         t=800,

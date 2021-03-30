@@ -1,11 +1,10 @@
 import sys
 
-from matplotlib.figure import Figure
-
-import plot
-
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_template import FigureManager
+from matplotlib.figure import Figure
+
+import Scripts.plot as plot
 
 
 def add_slider(name, slider):
@@ -26,12 +25,6 @@ slider_t = None
 
 # SEIRS SLIDERS
 slider_initial_symptomatic_infected = None
-
-
-# TOTAL PEOPLE
-sir_total = 10000
-sir_vital_total = 10000
-seirs_total = 83783945
 
 
 def make_model(fig: Figure):
@@ -62,7 +55,3 @@ def main():
 
     fig.canvas.draw_idle()
     plt.show()
-
-
-if __name__ == '__main__':
-    main()
